@@ -287,6 +287,7 @@
             font-weight: bold;
         }
 
+        /* Respiros / Linhas de separação solicitadas */
         .spacer-row td {
             height: 16px;
             border: none !important;
@@ -326,8 +327,9 @@
     <header>
         <div class="header-left">
             <img src="logo.png" alt="Logo" class="header-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'><path d=\'M30 40 C70 40, 160 40, 160 100 C160 140, 110 140, 75 140 L55 180 L55 140 C35 140, 30 120, 30 100 Z\' fill=\'%23DA5322\'/><path d=\'M75 110 C105 110, 175 110, 175 155 C175 185, 125 185, 95 185 L80 210 L80 185 C55 185, 65 160, 75 155 Z\' fill=\'%23484540\'/></svg>'">
-            <h1>Dashboard Desdobramento Santander 2026</h1>
         </div>
+        
+        <h1>Dashboard Desdobramento Santander 2026</h1>
         
         <div class="header-right">
             <div class="filters">
@@ -496,7 +498,6 @@
             return Number(val).toLocaleString('pt-BR', {maximumFractionDigits: decimals}); 
         }
 
-        // Converte string HH:MM:SS para total de segundos para cálculo matemático
         function timeToSeconds(timeStr) {
             if(!timeStr || timeStr === '-' || typeof timeStr !== 'string') return 0;
             let parts = timeStr.split(':');
@@ -504,7 +505,6 @@
             return (parseInt(parts[0])||0)*3600 + (parseInt(parts[1])||0)*60 + (parseInt(parts[2])||0);
         }
 
-        // Converte total de segundos de volta para string HH:MM:SS
         function secondsToTime(totalSecs) {
             if(isNaN(totalSecs) || totalSecs < 0) return '-';
             totalSecs = Math.round(totalSecs);
@@ -571,7 +571,7 @@
                         const excelKeys = ['DATA', 'REALIZADO', 'TEMPO REALIZADO', 'DISCAGEM', 'ATENDIDA', 'CPC', 'CPCA', 'PROPOSTA', 'PAGAMENTO', '($) CASH', '($) TKT CASH', '($) CONTABIL', '($) TKT CONTABIL', '(%) CONVERSÃO', '(%) CPC', '(%) EFETIVIDADE'];
                         
                         let topSummaryIdx = (metaGeralIdx > 2) ? metaGeralIdx - 2 : 5;
-                        let top_summary = {}; // Aqui fica gravada a META DIÁRIA bruta (Linha DIA)
+                        let top_summary = {}; 
                         if(rows[topSummaryIdx]) {
                             excelKeys.forEach((key, c_i) => {
                                 let val = rows[topSummaryIdx][c_i + 1];
@@ -627,8 +627,8 @@
                         }
 
                         db[targetMonth][sheetName] = {
-                            "top_summary": top_summary, // META DIARIA
-                            "meta_geral": getRowByLabel('META GERAL'), // Valor base do excel
+                            "top_summary": top_summary, 
+                            "meta_geral": getRowByLabel('META GERAL'), 
                             "realizado": getRowByLabel('REALIZADO'),
                             "meta_relogio": getRowByLabel('META RELOGIO'),
                             "pct_meta_realizado": getRowByLabel('(%) META REALIZADO'),
@@ -783,13 +783,13 @@
             const tbodyMeta = document.getElementById('metaBody');
             
             if(portfolioData && portfolioData.top_summary) {
-                const ts = portfolioData.top_summary; // Meta Diária Original
-                const rz = portfolioData.realizado; // Realizado Original
+                const ts = portfolioData.top_summary; 
+                const rz = portfolioData.realizado; 
                 const mr = portfolioData.meta_relogio;
                 const pde = portfolioData.pct_meta_relogio;
                 
-                let mgCalc = {}; // Meta Geral Dinâmica
-                let prCalc = {}; // (%) Meta Realizado Dinâmico
+                let mgCalc = {}; 
+                let prCalc = {}; 
 
                 const keysToMultiply = ['DISCAGEM', 'ATENDIDA', 'CPC', 'CPCA', 'PROPOSTA', 'PAGAMENTO', '($) CASH', '($) CONTABIL'];
 
@@ -908,10 +908,6 @@
                         <td>${formatPercent(prCalc['(%) CPC'])}</td>
                         <td>${formatPercent(prCalc['(%) EFETIVIDADE'])}</td>
                     </tr>
-                    
-                    <!-- Respiro logo abaixo de (%) Meta Realizado -->
-                    <tr class="spacer-row"><td colspan="16"></td></tr>
-
                     <tr class="meta-pct" style="background-color: #fff2cc;">
                         <td colspan="3">(%) META RELOGIO</td>
                         <td>${formatPercent(pde['DISCAGEM'])}</td>
